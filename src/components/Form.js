@@ -73,8 +73,20 @@ export const Form = () => {
     setTodoValue(todo.TodoValue);
   };
 
-  const handleEditSubmit = () => {
-    console.log("c");
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+
+    let items = [...todos];
+
+    let item = items[id];
+
+    item.TodoValue = todoValue;
+    item.completed = false;
+    items[id] = item;
+
+    setTodos(items);
+    setTodoValue("");
+    setEditForm(false);
   };
 
   return (
