@@ -55,6 +55,14 @@ export const Form = () => {
     localStorage.setItem("Todos", JSON.stringify(todos));
   }, [todos]); //useEffect will render whenever todos state change
 
+  //delete item form localstorage
+  const hendleDelete = (id) => {
+    const filtered = todos.filter((todo) => {
+      return todo.ID !== id;
+    });
+    setTodos(filtered);
+  };
+
   return (
     <>
       {/* form component */}
@@ -92,12 +100,18 @@ export const Form = () => {
                   <div style={{ marginRight: "7px" }}>
                     <Icon icon={edit2} size={18} />
                   </div>
-                  <div>
+                  <div onClick={() => hendleDelete(todo.ID)}>
                     <Icon icon={trash} size={18} />
                   </div>
                 </div>
               </div>
             ))}
+
+            <div>
+              <button onClick={() => setTodos([])} className="delete-all">
+                Delete All
+              </button>
+            </div>
           </>
         )}
       </div>
