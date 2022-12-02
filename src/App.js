@@ -1,7 +1,12 @@
+import { Form } from "./components/Form";
+
 function App() {
   return (
-    <div>
-      <h2>Hello, Programmer</h2>
+    <div className="wrapper">
+      <h3>TODOAPP USING REACT HOOKS AND LOCALSTORAGE</h3>
+      <div className="form-and-todo-box">
+        <Form />
+      </div>
     </div>
   );
 }
