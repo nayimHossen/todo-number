@@ -10,12 +10,23 @@ import { plus } from "react-icons-kit/feather/plus";
 import { edit2 } from "react-icons-kit/feather/edit2";
 import { trash } from "react-icons-kit/feather/trash";
 
+//get todos from local storage
+const getTodosFromsLS = () => {
+  const data = localStorage.getItem("Todos");
+
+  if (data) {
+    return JSON.parse(data);
+  } else {
+    return [];
+  }
+};
+
 export const Form = () => {
   //todo value state
   const [todoValue, setTodoValue] = useState("");
 
   //todos array of objects
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(getTodosFromsLS());
   console.log(todos);
 
   const handleSubmit = (e) => {
@@ -38,6 +49,12 @@ export const Form = () => {
     setTodoValue("");
   };
 
+  //saving data to local storage
+
+  useEffect(() => {
+    localStorage.setItem("Todos", JSON.stringify(todos));
+  }, [todos]); //useEffect will render whenever todos state change
+
   return (
     <>
       {/* form component */}
@@ -58,6 +75,31 @@ export const Form = () => {
             </div>
           </div>
         </form>
+
+        {/* show data form local storage */}
+        {todos.length > 0 && (
+          <>
+            {todos.map((todo, index) => (
+              <div className="todo" key={todo.ID}>
+                {/* check and value div */}
+                <div>
+                  <input type="checkbox" />
+                  <span>{todo.TodoValue}</span>
+                </div>
+
+                {/* edit and delete icon dev */}
+                <div className="edit-and-delete">
+                  <div style={{ marginRight: "7px" }}>
+                    <Icon icon={edit2} size={18} />
+                  </div>
+                  <div>
+                    <Icon icon={trash} size={18} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
       {/* end of form component */}
     </>
