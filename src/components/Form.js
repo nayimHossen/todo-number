@@ -27,7 +27,10 @@ export const Form = () => {
 
   //todos array of objects
   const [todos, setTodos] = useState(getTodosFromsLS());
-  console.log(todos);
+
+  //edit from state
+  const [editForm, setEditForm] = useState(false);
+  const [id, setId] = useState();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,59 +66,99 @@ export const Form = () => {
     setTodos(filtered);
   };
 
+  //update todo
+  const hendleEdit = (todo, index) => {
+    setEditForm(true);
+    setId(index);
+    setTodoValue(todo.TodoValue);
+  };
+
+  const handleEditSubmit = () => {
+    console.log("c");
+  };
+
   return (
     <>
       {/* form component */}
-      <div className="form">
-        <form autoComplete="off" onSubmit={handleSubmit}>
-          <div className="input-and-button">
-            <input
-              type="text"
-              placeholder="Add an Item"
-              required
-              onChange={(e) => setTodoValue(e.target.value)}
-              value={todoValue}
-            />
-            <div className="button">
-              <button type="submit">
-                <Icon icon={plus} size={20} />
-              </button>
+      {editForm === false && (
+        <div className="form">
+          <form autoComplete="off" onSubmit={handleSubmit}>
+            <div className="input-and-button">
+              <input
+                type="text"
+                placeholder="Add an Item"
+                required
+                onChange={(e) => setTodoValue(e.target.value)}
+                value={todoValue}
+              />
+              <div className="button">
+                <button type="submit">
+                  <Icon icon={plus} size={20} />
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
+      )}
+      {/* end of form component */}
 
-        {/* show data form local storage */}
-        {todos.length > 0 && (
-          <>
-            {todos.map((todo, index) => (
-              <div className="todo" key={todo.ID}>
-                {/* check and value div */}
-                <div>
-                  <input type="checkbox" />
-                  <span>{todo.TodoValue}</span>
-                </div>
+      {/*edit form component */}
+      {editForm === true && (
+        <div className="form">
+          <form autoComplete="off" onSubmit={handleEditSubmit}>
+            <div className="input-and-button">
+              <input
+                type="text"
+                placeholder="Add an Item"
+                required
+                onChange={(e) => setTodoValue(e.target.value)}
+                value={todoValue}
+              />
+              <div className="button edit">
+                <button type="submit">Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
+      {/* end of edit form component */}
 
-                {/* edit and delete icon dev */}
+      {/* show data form local storage */}
+      {todos.length > 0 && (
+        <>
+          {todos.map((todo, index) => (
+            <div className="todo" key={todo.ID}>
+              {/* check and value div */}
+              <div>
+                {editForm === false && <input type="checkbox" />}
+
+                <span>{todo.TodoValue}</span>
+              </div>
+
+              {/* edit and delete icon dev */}
+              {editForm === false && (
                 <div className="edit-and-delete">
-                  <div style={{ marginRight: "7px" }}>
+                  <div
+                    onClick={() => hendleEdit(todo, index)}
+                    style={{ marginRight: "7px" }}
+                  >
                     <Icon icon={edit2} size={18} />
                   </div>
                   <div onClick={() => hendleDelete(todo.ID)}>
                     <Icon icon={trash} size={18} />
                   </div>
                 </div>
-              </div>
-            ))}
-
-            <div>
-              <button onClick={() => setTodos([])} className="delete-all">
-                Delete All
-              </button>
+              )}
             </div>
-          </>
-        )}
-      </div>
-      {/* end of form component */}
+          ))}
+
+          <div>
+            <button onClick={() => setTodos([])} className="delete-all">
+              Delete All
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 };
