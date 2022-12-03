@@ -17,6 +17,9 @@ const Main = () => {
   // todos array of objects
   const [todos, setTodos] = useState(getTodosFromLS());
 
+  //check todo array
+  const [checkArray, setCheckArray] = useState([]);
+
   // form submit event
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +46,7 @@ const Main = () => {
   const handleDelete = (id) => {
     // console.log(id);
     const filtered = todos.filter((todo) => {
-      return todo.ID !== id;
+      return todo.id !== id;
     });
     setTodos(filtered);
   };
@@ -78,8 +81,6 @@ const Main = () => {
     setTodoValue("");
   };
 
-  const [checkArray, setCheckArray] = useState([]);
-
   const handleCheck = (e) => {
     // setisChecked(e.target.checked);
     if (e.target.checked === true) {
@@ -95,96 +96,100 @@ const Main = () => {
   }, [checkArray]);
 
   return (
-    <>
-      {/* form component */}
-      {editForm === false && (
-        <div className="form">
+    <section className="flex gap-5">
+      <div className="w-[60%]">
+        {/* form component */}
+        {editForm === false && (
           <form autoComplete="off" onSubmit={handleSubmit}>
-            <div className="input-and-button">
-              <input
-                type="number"
-                placeholder="Input a number"
-                required
-                onChange={(e) => setTodoValue(e.target.value)}
-                value={todoValue}
-              />
-              <div className="button">
-                <button type="submit">ADD</button>
-              </div>
-            </div>
+            <input
+              type="number"
+              placeholder="Input a number"
+              required
+              onChange={(e) => setTodoValue(e.target.value)}
+              value={todoValue}
+              className="p-3 w-[70%]"
+            />
+            <button
+              type="submit"
+              className="bg-[blue] text-white p-3 w-[30%] font-bold"
+            >
+              ADD
+            </button>
           </form>
-        </div>
-      )}
-      {/* end of form component */}
+        )}
+        {/* end of form component */}
 
-      {/* edit form component */}
-      {editForm === true && (
-        <div className="form">
+        {/* edit form component */}
+        {editForm === true && (
           <form autoComplete="off" onSubmit={handleEditSubmit}>
-            <div className="input-and-button">
-              <input
-                type="text"
-                placeholder="Edit your Item"
-                required
-                onChange={(e) => setTodoValue(e.target.value)}
-                value={todoValue}
-              />
-              <div className="button edit">
-                <button type="submit">UPDATE</button>
-              </div>
-            </div>
+            <input
+              type="text"
+              placeholder="Edit your Item"
+              required
+              onChange={(e) => setTodoValue(e.target.value)}
+              value={todoValue}
+              className="p-3 w-[70%]"
+            />
+
+            <button
+              type="submit"
+              className="bg-[blue] text-white p-3 w-[30%] font-bold"
+            >
+              UPDATE
+            </button>
           </form>
-        </div>
-      )}
-      {/* end of edit form component */}
+        )}
+        {/* end of edit form component */}
 
-      {/* start of rendering todos depending on
+        {/* start of rendering todos depending on
           if we have length of todos greater than 0 */}
-      {todos.length > 0 && (
-        <>
-          {todos.map((todo, index) => (
-            <div className="todo" key={todo.id}>
-              <div>
-                {/* we dont need to show checkbox when edit
-                      button is clicked */}
-                {editForm === false && (
-                  <input
-                    type="checkbox"
-                    value={todo.value}
-                    onChange={(e) => handleCheck(e)}
-                  />
-                )}
-                <span
-                  style={
-                    todo.completed === true
-                      ? { textDecoration: "line-through" }
-                      : { textDecoration: "none" }
-                  }
-                >
-                  {todo.value}
-                </span>
-              </div>
-
-              {/* we dont need to show edit and delete icons when edit
-                  button is clicked */}
-              {editForm === false && (
-                <div className="edit-and-delete">
-                  <div
-                    style={{ marginRight: 7 + "px" }}
-                    onClick={() => handleEdit(todo, index)}
-                  >
-                    Edit
-                  </div>
-                  <div onClick={() => handleDelete(todo.ID)}>Delete</div>
+        {todos.length > 0 && (
+          <>
+            {todos.map((todo, index) => (
+              <div
+                className="flex justify-between items-center border rounded my-3 p-2"
+                key={todo.id}
+              >
+                <div className="flex gap-3">
+                  {editForm === false && (
+                    <input
+                      type="checkbox"
+                      value={todo.value}
+                      onChange={(e) => handleCheck(e)}
+                      className="w-5 cursor-pointer"
+                    />
+                  )}
+                  <span className="font-bold text-sm">{todo.value}</span>
                 </div>
-              )}
-            </div>
-          ))}
-        </>
-      )}
-      {/* end of rendering todos depending on
-          if we have length of todos greater than 0 */}
-    </>
+
+                {editForm === false && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(todo, index)}
+                      className="bg-[blue] p-[2px] text-sm rounded text-white"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(todo.id)}
+                      className="bg-[blue] p-[2px] text-sm rounded text-white"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+
+      <div className="w-[40%]">
+        <div className="p-3 bg-[blue] text-white">
+          <h2 className="text-center">Total Number</h2>
+        </div>
+      </div>
+    </section>
   );
 };
 
