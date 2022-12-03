@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SelectedCart from "./SelectedCart";
 
 // getting todos from local storage
 const getTodosFromLS = () => {
@@ -19,6 +20,9 @@ const Main = () => {
 
   //check todo array
   const [checkArray, setCheckArray] = useState([]);
+
+  //total number count
+  const [total, setTotal] = useState(0);
 
   // form submit event
   const handleSubmit = (e) => {
@@ -49,6 +53,7 @@ const Main = () => {
       return todo.id !== id;
     });
     setTodos(filtered);
+    setCheckArray([]);
   };
 
   // edit form
@@ -62,6 +67,7 @@ const Main = () => {
     setEditForm(true);
     setTodoValue(todo.value);
     setId(index);
+    setCheckArray([]);
   };
 
   // edit todo submit
@@ -92,12 +98,15 @@ const Main = () => {
   };
 
   useEffect(() => {
-    console.log(checkArray);
+    let sum = checkArray.reduce(function (a, b) {
+      return Number(a) + Number(b);
+    }, 0);
+    setTotal(sum);
   }, [checkArray]);
 
   return (
-    <section className="flex gap-5">
-      <div className="w-[60%]">
+    <section className="sm:flex gap-5">
+      <div className="sm:w-[60%]">
         {/* form component */}
         {editForm === false && (
           <form autoComplete="off" onSubmit={handleSubmit}>
@@ -147,7 +156,7 @@ const Main = () => {
           <>
             {todos.map((todo, index) => (
               <div
-                className="flex justify-between items-center border rounded my-3 p-2"
+                className="flex justify-between items-center border rounded my-3 p-2 bg-white"
                 key={todo.id}
               >
                 <div className="flex gap-3">
@@ -159,20 +168,20 @@ const Main = () => {
                       className="w-5 cursor-pointer"
                     />
                   )}
-                  <span className="font-bold text-sm">{todo.value}</span>
+                  <span className="font-bold">{todo.value}</span>
                 </div>
 
                 {editForm === false && (
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleEdit(todo, index)}
-                      className="bg-[blue] p-[2px] text-sm rounded text-white"
+                      className="bg-[blue] p-[2px] rounded text-white"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(todo.id)}
-                      className="bg-[blue] p-[2px] text-sm rounded text-white"
+                      className="bg-[blue] p-[2px] rounded text-white"
                     >
                       Delete
                     </button>
@@ -184,9 +193,22 @@ const Main = () => {
         )}
       </div>
 
-      <div className="w-[40%]">
-        <div className="p-3 bg-[blue] text-white">
+      <div className="sm:w-[40%]">
+        <div className="p-3 bg-[blue] text-white flex justify-center items-center gap-2">
           <h2 className="text-center">Total Number</h2>
+          <span className="text-white bg-red-500 rounded-full px-2">
+            {checkArray.length}
+          </span>
+        </div>
+        {checkArray.map((number, index) => (
+          <SelectedCart key={index} number={number} index={index} />
+        ))}
+
+        <div className="my-3">
+          <div className="flex justify-between items-center font-bold">
+            <p>Total -</p>
+            <span className="bg-white px-20 border py-2 rounded">{total}</span>
+          </div>
         </div>
       </div>
     </section>
