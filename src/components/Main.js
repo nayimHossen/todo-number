@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SelectedCart from "./SelectedCart";
 
 // getting todos from local storage
-const getTodosFromLS = () => {
+const getTodosFromLocal = () => {
   const data = localStorage.getItem("Todos");
   if (data) {
     return JSON.parse(data);
@@ -16,13 +16,15 @@ const Main = () => {
   const [todoValue, setTodoValue] = useState("");
 
   // todos array of objects
-  const [todos, setTodos] = useState(getTodosFromLS());
+  const [todos, setTodos] = useState(getTodosFromLocal());
 
   //check todo array
   const [checkArray, setCheckArray] = useState([]);
 
   //total number count
   const [total, setTotal] = useState(0);
+
+  const [checkAll, setCheckAll] = useState(false);
 
   // form submit event
   const handleSubmit = (e) => {
@@ -149,6 +151,20 @@ const Main = () => {
           </form>
         )}
         {/* end of edit form component */}
+        {todos.length > 0 && (
+          <div className="flex justify-between items-center border rounded my-3 p-2 bg-white">
+            <div className="flex gap-3">
+              {editForm === false && (
+                <input
+                  type="checkbox"
+                  onChange={() => !checkAll}
+                  className="w-5 cursor-pointer"
+                />
+              )}
+              <span className="font-bold">Select All</span>
+            </div>
+          </div>
+        )}
 
         {/* start of rendering todos depending on
           if we have length of todos greater than 0 */}
